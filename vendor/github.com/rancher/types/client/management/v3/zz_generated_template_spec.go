@@ -12,6 +12,7 @@ const (
 	TemplateSpecFieldFolderName               = "folderName"
 	TemplateSpecFieldIcon                     = "icon"
 	TemplateSpecFieldIconFilename             = "iconFilename"
+	TemplateSpecFieldInstallCount             = "installCount"
 	TemplateSpecFieldMaintainer               = "maintainer"
 	TemplateSpecFieldPath                     = "path"
 	TemplateSpecFieldProjectURL               = "projectURL"
@@ -31,6 +32,7 @@ type TemplateSpec struct {
 	FolderName               string                `json:"folderName,omitempty" yaml:"folderName,omitempty"`
 	Icon                     string                `json:"icon,omitempty" yaml:"icon,omitempty"`
 	IconFilename             string                `json:"iconFilename,omitempty" yaml:"iconFilename,omitempty"`
+	InstallCount             int64                 `json:"installCount,omitempty" yaml:"installCount,omitempty"`
 	Maintainer               string                `json:"maintainer,omitempty" yaml:"maintainer,omitempty"`
 	Path                     string                `json:"path,omitempty" yaml:"path,omitempty"`
 	ProjectURL               string                `json:"projectURL,omitempty" yaml:"projectURL,omitempty"`

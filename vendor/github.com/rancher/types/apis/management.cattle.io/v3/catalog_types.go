@@ -86,6 +86,8 @@ type TemplateSpec struct {
 	Versions   []TemplateVersionSpec `json:"versions,omitempty"`
 
 	Category string `json:"category,omitempty"`
+
+	InstallCount int `json:"installCount,omitempty" yaml:"install_count,omitempty"`
 }
 
 type TemplateStatus struct {

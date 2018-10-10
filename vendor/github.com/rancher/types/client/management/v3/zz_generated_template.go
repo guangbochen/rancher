@@ -18,6 +18,7 @@ const (
 	TemplateFieldFolderName               = "folderName"
 	TemplateFieldIcon                     = "icon"
 	TemplateFieldIconFilename             = "iconFilename"
+	TemplateFieldInstallCount             = "installCount"
 	TemplateFieldLabels                   = "labels"
 	TemplateFieldMaintainer               = "maintainer"
 	TemplateFieldName                     = "name"
@@ -50,6 +51,7 @@ type Template struct {
 	FolderName               string                `json:"folderName,omitempty" yaml:"folderName,omitempty"`
 	Icon                     string                `json:"icon,omitempty" yaml:"icon,omitempty"`
 	IconFilename             string                `json:"iconFilename,omitempty" yaml:"iconFilename,omitempty"`
+	InstallCount             int64                 `json:"installCount,omitempty" yaml:"installCount,omitempty"`
 	Labels                   map[string]string     `json:"labels,omitempty" yaml:"labels,omitempty"`
 	Maintainer               string                `json:"maintainer,omitempty" yaml:"maintainer,omitempty"`
 	Name                     string                `json:"name,omitempty" yaml:"name,omitempty"`

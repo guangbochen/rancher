@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
 	"sort"
 	"strings"
 	"time"
@@ -65,9 +66,21 @@ type Lifecycle struct {
 	AppRevisionGetter     v3.AppRevisionsGetter
 	AppGetter             v3.AppsGetter
 	NsClient              corev1.NamespaceInterface
+	TemplateGetter        mgmtv3.TemplatesGetter
 }
 
 func (l *Lifecycle) Create(obj *v3.App) (*v3.App, error) {
+	externalId := obj.Spec.ExternalID
+	cataRe := regexp.MustCompile("catalog=(.*?)&")
+	tempRe := regexp.MustCompile("template=(.*?)&")
+	catalog := cataRe.FindStringSubmatch(externalId)
+	template := tempRe.FindStringSubmatch(externalId)
+	templateName := catalog[1] + "-" + template[1]
+	fmt.Printf("DEBUG APP ExternalID: %+v\n", templateName)
+	// temp, err := l.TemplateGetter.Templates(externalId)
+	// if err != nil {
+	// 	fmt.Printf("DEBUG APP: %+v\n", temp)
+	// }
 	v3.AppConditionMigrated.True(obj)
 	return obj, nil
 }

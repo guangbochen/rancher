@@ -52,7 +52,9 @@ func Formatter(apiContext *types.APIContext, resource *types.RawResource) {
 		for _, w := range workloads {
 			_, appID := ref.Parse(resource.ID)
 			if w.WorkloadLabels[appLabel] == appID && w.State != activeState {
-				resource.Values["state"] = deployingState
+				fmt.Println(resource.Values["state"])
+				fmt.Printf("DEBUG: %+v\n", resource.Values)
+				// resource.Values["state"] = deployingState
 				resource.Values["transitioning"] = "yes"
 				transitionMsg := convert.ToString(resource.Values["transitioningMessage"])
 				if transitionMsg != "" {

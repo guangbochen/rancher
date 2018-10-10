@@ -30,6 +30,7 @@ type AppSpec struct {
 var (
 	AppConditionInstalled condition.Cond = "Installed"
 	AppConditionMigrated  condition.Cond = "Migrated"
+	AppConditionRunning   condition.Cond = "Running"
 )
 
 type AppStatus struct {
