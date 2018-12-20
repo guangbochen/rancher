@@ -18,10 +18,11 @@ import (
 )
 
 const (
-	base       = 32768
-	end        = 61000
-	tillerName = "tiller"
-	helmName   = "helm"
+	base            = 32768
+	end             = 61000
+	tillerName      = "tiller"
+	helmName        = "helm"
+	forceUpgradeStr = "--force"
 )
 
 func ParseExternalID(externalID string) (string, error) {
@@ -78,7 +79,9 @@ func InstallCharts(rootDir, port string, obj *v3.App) error {
 	commands := make([]string, 0)
 	commands = append([]string{"upgrade", "--install", "--namespace", obj.Spec.TargetNamespace, obj.Name}, setValues...)
 	commands = append(commands, rootDir)
-
+	if obj.Status.ForceUpgrade {
+		commands = append(commands, forceUpgradeStr)
+	}
 	cmd := exec.Command(helmName, commands...)
 	cmd.Env = []string{fmt.Sprintf("%s=%s", "HELM_HOST", "127.0.0.1:"+port)}
 	stderrBuf := &bytes.Buffer{}
