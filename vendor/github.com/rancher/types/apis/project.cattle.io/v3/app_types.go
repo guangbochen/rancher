@@ -38,6 +38,7 @@ type AppStatus struct {
 	Notes                string            `json:"notes,omitempty"`
 	Conditions           []AppCondition    `json:"conditions,omitempty"`
 	LastAppliedTemplates string            `json:"lastAppliedTemplate,omitempty"`
+	ForceUpgrade         bool              `json:"forceUpgrade,omitempty"`
 }
 
 type AppCondition struct {
@@ -74,10 +75,12 @@ type AppRevisionStatus struct {
 }
 
 type AppUpgradeConfig struct {
-	ExternalID string            `json:"externalId,omitempty"`
-	Answers    map[string]string `json:"answers,omitempty"`
+	ExternalID   string            `json:"externalId,omitempty"`
+	Answers      map[string]string `json:"answers,omitempty"`
+	ForceUpgrade bool              `json:"forceUpgrade,omitempty"`
 }
 
 type RollbackRevision struct {
 	RevisionName string `json:"revisionName,omitempty" norman:"type=reference[/v3/project/schemas/apprevision]"`
+	ForceUpgrade bool   `json:"forceUpgrade,omitempty"`
 }

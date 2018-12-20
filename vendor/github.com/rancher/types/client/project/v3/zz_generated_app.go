@@ -16,6 +16,7 @@ const (
 	AppFieldDescription          = "description"
 	AppFieldExternalID           = "externalId"
 	AppFieldFiles                = "files"
+	AppFieldForceUpgrade         = "forceUpgrade"
 	AppFieldLabels               = "labels"
 	AppFieldLastAppliedTemplates = "lastAppliedTemplate"
 	AppFieldMultiClusterAppID    = "multiClusterAppId"
@@ -45,6 +46,7 @@ type App struct {
 	Description          string            `json:"description,omitempty" yaml:"description,omitempty"`
 	ExternalID           string            `json:"externalId,omitempty" yaml:"externalId,omitempty"`
 	Files                map[string]string `json:"files,omitempty" yaml:"files,omitempty"`
+	ForceUpgrade         bool              `json:"forceUpgrade,omitempty" yaml:"forceUpgrade,omitempty"`
 	Labels               map[string]string `json:"labels,omitempty" yaml:"labels,omitempty"`
 	LastAppliedTemplates string            `json:"lastAppliedTemplate,omitempty" yaml:"lastAppliedTemplate,omitempty"`
 	MultiClusterAppID    string            `json:"multiClusterAppId,omitempty" yaml:"multiClusterAppId,omitempty"`
