@@ -66,7 +66,7 @@ func GenerateRandomPort() string {
 	}
 }
 
-func InstallCharts(rootDir, port string, obj *v3.App) error {
+func InstallCharts(rootDir, port string, obj *v3.App, force bool) error {
 	setValues := []string{}
 	if obj.Spec.Answers != nil {
 		answers := obj.Spec.Answers
@@ -79,7 +79,7 @@ func InstallCharts(rootDir, port string, obj *v3.App) error {
 	commands := make([]string, 0)
 	commands = append([]string{"upgrade", "--install", "--namespace", obj.Spec.TargetNamespace, obj.Name}, setValues...)
 	commands = append(commands, rootDir)
-	if obj.Status.ForceUpgrade {
+	if force {
 		commands = append(commands, forceUpgradeStr)
 	}
 	cmd := exec.Command(helmName, commands...)

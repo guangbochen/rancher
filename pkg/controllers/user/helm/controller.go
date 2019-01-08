@@ -77,6 +77,15 @@ func (l *Lifecycle) Updated(obj *v3.App) (runtime.Object, error) {
 	if obj.Spec.ExternalID == "" && len(obj.Spec.Files) == 0 {
 		return obj, nil
 	}
+
+	var forceUpgrade = obj.Status.ForceUpgrade
+	if forceUpgrade {
+		// reset forceUpgrade to true
+		obj.Status.ForceUpgrade = false
+		if _, err := l.AppGetter.Apps(obj.Namespace).Update(obj); err != nil {
+			return nil, err
+		}
+	}
 	// always refresh app to avoid updating app twice
 	_, projectName := ref.Parse(obj.Spec.ProjectName)
 	var err error
@@ -86,7 +95,7 @@ func (l *Lifecycle) Updated(obj *v3.App) (runtime.Object, error) {
 	}
 	// if app was created before 2.1, run migrate to install a no-op helm release
 	newObj, err := v3.AppConditionMigrated.Once(obj, func() (runtime.Object, error) {
-		return l.DeployApp(obj)
+		return l.DeployApp(obj, false)
 	})
 	if err != nil {
 		return obj, err
@@ -109,7 +118,7 @@ func (l *Lifecycle) Updated(obj *v3.App) (runtime.Object, error) {
 			}
 		}
 	}
-	result, err := l.DeployApp(obj)
+	result, err := l.DeployApp(obj, forceUpgrade)
 	if err != nil {
 		return result, err
 	}
@@ -141,14 +150,15 @@ func (l *Lifecycle) Updated(obj *v3.App) (runtime.Object, error) {
 	return result, nil
 }
 
-func (l *Lifecycle) DeployApp(obj *v3.App) (*v3.App, error) {
+func (l *Lifecycle) DeployApp(obj *v3.App, force bool) (*v3.App, error) {
+	fmt.Println("invoking eeployApp")
 	newObj, err := v3.AppConditionInstalled.Do(obj, func() (runtime.Object, error) {
 		template, notes, tempDir, err := generateTemplates(obj, l.TemplateVersionClient, l.TemplateContentClient)
 		defer os.RemoveAll(tempDir)
 		if err != nil {
 			return obj, err
 		}
-		if err := l.Run(obj, template, tempDir, notes); err != nil {
+		if err := l.Run(obj, template, tempDir, notes, force); err != nil {
 			return obj, err
 		}
 		return obj, nil
@@ -215,7 +225,7 @@ func (l *Lifecycle) Remove(obj *v3.App) (runtime.Object, error) {
 	return obj, nil
 }
 
-func (l *Lifecycle) Run(obj *v3.App, template, templateDir, notes string) error {
+func (l *Lifecycle) Run(obj *v3.App, template, templateDir, notes string, force bool) error {
 	tempDir, err := ioutil.TempDir("", "kubeconfig-")
 	if err != nil {
 		return err
@@ -225,7 +235,7 @@ func (l *Lifecycle) Run(obj *v3.App, template, templateDir, notes string) error 
 	if err != nil {
 		return err
 	}
-	if err := helmInstall(templateDir, kubeConfigPath, obj); err != nil {
+	if err := helmInstall(templateDir, kubeConfigPath, obj, force); err != nil {
 		return err
 	}
 	return l.createAppRevision(obj, template, notes, false)

@@ -44,13 +44,14 @@ func WriteTempDir(rootDir string, files map[string]string) (string, error) {
 	return "", nil
 }
 
-func helmInstall(templateDir, kubeconfigPath string, app *v3.App) error {
-	cont, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	addr := common.GenerateRandomPort()
-	probeAddr := common.GenerateRandomPort()
-	go common.StartTiller(cont, addr, probeAddr, app.Spec.TargetNamespace, kubeconfigPath)
-	return common.InstallCharts(templateDir, addr, app)
+func helmInstall(templateDir, kubeconfigPath string, app *v3.App, force bool) error {
+	//cont, cancel := context.WithCancel(context.Background())
+	//defer cancel()
+	//addr := common.GenerateRandomPort()
+	//probeAddr := common.GenerateRandomPort()
+	//go common.StartTiller(cont, addr, probeAddr, app.Spec.TargetNamespace, kubeconfigPath)
+	//return common.InstallCharts(templateDir, addr, app)
+	return common.InstallCharts(templateDir, "44134", app, force)
 }
 
 func helmDelete(kubeconfigPath string, app *v3.App) error {

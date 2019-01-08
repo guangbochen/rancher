@@ -38,7 +38,7 @@ type AppStatus struct {
 	Notes                string            `json:"notes,omitempty"`
 	Conditions           []AppCondition    `json:"conditions,omitempty"`
 	LastAppliedTemplates string            `json:"lastAppliedTemplate,omitempty"`
-	ForceUpgrade         bool              `json:"forceUpgrade,omitempty"`
+	ForceUpgrade         bool              `json:"forceUpgrade" norman:"default=false"`
 }
 
 type AppCondition struct {
