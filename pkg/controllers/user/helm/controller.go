@@ -5,6 +5,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
+	"github.com/rancher/norman/controller"
 	"io/ioutil"
 	"k8s.io/api/core/v1"
 	"os"
@@ -221,6 +222,11 @@ func (l *Lifecycle) DeployApp(obj *v3.App) (*v3.App, error) {
 			return obj, err
 		}
 		if err := l.Run(obj, template, appDir, notes); err != nil {
+			if strings.Contains(err.Error(), "failed to install app") {
+				return obj, &controller.ForgetError{
+					Err: err,
+				}
+			}
 			return obj, err
 		}
 		return obj, nil
