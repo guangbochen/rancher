@@ -200,7 +200,7 @@ func (h *Helm) updateGit(fetchLatest bool) (string, error) {
 	}
 
 	if empty {
-		if err = git.Clone(h.LocalPath, repoURL, h.branch); err != nil {
+		if err = git.CloneWithDepth(h.LocalPath, repoURL, h.branch, 1); err != nil {
 			return "", errors.Wrap(err, "Clone failed")
 		}
 	} else {
